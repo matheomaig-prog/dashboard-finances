@@ -531,7 +531,7 @@ function render(){
      <div class="card"><h3>Évolution du patrimoine</h3><div class="h-sub">Au fil des mois${state.history.length<2?" — se remplit chaque mois":""}</div><div class="cv sm"><canvas id="cHist"></canvas></div></div>
      <div class="card"><h3>Rendement par classe (%)</h3><div class="h-sub">% de gain de chaque actif vs ton investi — là tu vois quoi rapporte le plus</div><div class="cv sm"><canvas id="cPerf"></canvas></div></div>
    </div>
-   ${lossClasses.length?'<div style="background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;font-size:12.5px;border-radius:12px;padding:11px 14px;margin-top:16px">⚠ En moins-value : '+lossClasses.map(a=>esc(a.name)+" ("+a.pvpct.toFixed(1)+"%)").join(", ")+'</div>':''}
+   ${lossClasses.length?'<div style="background:linear-gradient(150deg,rgba(176,42,42,.28),rgba(140,30,30,.14));border:1px solid rgba(200,60,60,.4);color:#ffb0a6;font-size:12.5px;border-radius:12px;padding:11px 14px;margin-top:16px;box-shadow:0 0 18px rgba(176,42,42,.18)">⚠ En moins-value : '+lossClasses.map(a=>esc(a.name)+" ("+a.pvpct.toFixed(1)+"%)").join(", ")+'</div>':''}
    <div class="grid two" style="margin-top:16px">
      <div class="card"><h3>🎯 Priorités du moment</h3><div class="h-sub">Tes objectifs de vie, dans l'ordre</div>
        ${lifeSorted.map((x,idx)=>'<div style="display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid #f4f6fb;font-size:12.5px"><span style="width:20px;height:20px;border-radius:6px;background:var(--accent);color:#fff;font-weight:700;font-size:11px;display:flex;align-items:center;justify-content:center;flex:none">'+(idx+1)+'</span><span style="font-weight:650">'+esc(x.o.titre)+'</span>'+badge(x.o.statut)+'</div>').join("")}

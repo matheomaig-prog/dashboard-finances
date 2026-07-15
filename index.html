@@ -652,13 +652,16 @@ refresh();
   gate.innerHTML=`<div class="box">
     <h2>Dashboard finances</h2>
     <p class="sub">Connecte-toi pour accéder à tes données.</p>
-    <label>Email</label><input id="agEmail" type="email" autocomplete="username">
-    <label>Mot de passe</label><input id="agPass" type="password" autocomplete="current-password">
-    <button class="main" id="agBtn">Se connecter</button>
+    <form id="agForm" autocomplete="on">
+    <label>Email</label><input id="agEmail" name="email" type="email" autocomplete="username" autocapitalize="off" autocorrect="off" spellcheck="false">
+    <label>Mot de passe</label><input id="agPass" name="password" type="password" autocomplete="current-password">
+    <button class="main" id="agBtn" type="submit">Se connecter</button>
+    </form>
     <div class="toggle" id="agToggle">Pas encore de compte ? Créer un compte</div>
     <div class="msg" id="agMsg"></div>
   </div>`;
   document.body.appendChild(gate);
+  try{const _e=localStorage.getItem("dashfin_email");if(_e)$("agEmail").value=_e;}catch(e){}
 
   const syncBar=document.createElement("div");
   syncBar.id="syncBar";syncBar.style.display="none";
@@ -670,9 +673,11 @@ refresh();
 
   $("agToggle").onclick=()=>{mode=(mode==="signin")?"signup":"signin";$("agBtn").textContent=(mode==="signin")?"Se connecter":"Créer le compte";$("agToggle").textContent=(mode==="signin")?"Pas encore de compte ? Créer un compte":"Déjà un compte ? Se connecter";setMsg("","");};
 
-  $("agBtn").onclick=async()=>{
+  $("agForm").onsubmit=async(e)=>{
+    e.preventDefault();
     const email=$("agEmail").value.trim(),pass=$("agPass").value;
     if(!email||!pass){setMsg("Email et mot de passe requis.","err");return;}
+    try{localStorage.setItem("dashfin_email",email);}catch(e){}
     $("agBtn").disabled=true;setMsg("…","ok");
     try{
       if(mode==="signup"){

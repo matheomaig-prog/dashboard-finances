@@ -1,6 +1,6 @@
 {
-  "name": "PFM — Finances",
-  "short_name": "Finances",
+  "name": "PFM — Personal Finance Management",
+  "short_name": "PFM",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

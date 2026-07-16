@@ -170,6 +170,13 @@ table.tb tbody tr:hover td{background:rgba(255,255,255,.025)}
 .badge{backdrop-filter:blur(4px)}
 .perf{gap:22px}.perf>div{position:relative}.perf>div:not(:last-child)::after{content:"";position:absolute;right:-11px;top:2px;bottom:2px;width:1px;background:linear-gradient(180deg,transparent,rgba(255,255,255,.12),transparent)}
 .h-sub{opacity:.92}
+/* upgrade franc & uniforme */
+.card{position:relative}
+.card::before{content:"";position:absolute;top:0;left:16px;right:16px;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.24),transparent);pointer-events:none;z-index:1}
+.card.kpi{background:radial-gradient(120% 150% at 50% -22%,rgba(77,141,255,.13),transparent 60%),linear-gradient(158deg,rgba(255,255,255,.075),rgba(255,255,255,.02))}
+.kpi .val{background:linear-gradient(120deg,#ffffff,#9ec5ff)}
+.card h3{position:relative;padding-left:12px}
+.card h3::before{content:"";position:absolute;left:0;top:3px;bottom:3px;width:3px;border-radius:3px;background:linear-gradient(180deg,var(--accent),transparent)}
 .section[data-s="synthese"] .kpis .card.kpi:first-child>.lbl,.section[data-s="synthese"] .kpis .card.kpi:first-child>.val,.section[data-s="synthese"] .kpis .card.kpi:first-child>.meta{position:relative;z-index:1}
 .mini-ic{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;margin-right:8px;vertical-align:-3px}.mini-ic svg{width:15px;height:15px;stroke-width:2}
 .section[data-s="synthese"] .kpis .card.kpi:first-child .val{background:linear-gradient(100deg,#f2f6ff,#8fd0ff 55%,#5ff0c0);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}

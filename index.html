@@ -137,12 +137,12 @@ table.tb th{color:#9aa7c6}
 .kpi .val{font-size:26px}
 /* Héros patrimoine (Synthèse) */
 .section[data-s="synthese"] .kpis{grid-template-columns:1.45fr 1fr;align-items:stretch}
-.section[data-s="synthese"] .kpis .card.kpi:first-child{grid-row:1 / span 3;display:flex;flex-direction:column;justify-content:flex-start;padding-top:20px;
+.section[data-s="synthese"] .kpis>.card.kpi:first-child{grid-row:1 / span 3;display:flex;flex-direction:column;justify-content:flex-start;padding-top:20px;
  background:linear-gradient(150deg,rgba(77,141,255,.18),rgba(77,141,255,.03) 46%,rgba(255,255,255,.012));border-color:rgba(77,141,255,.28);box-shadow:0 14px 44px rgba(0,0,0,.36),var(--glow),inset 0 1px 0 rgba(255,255,255,.06)}
-.section[data-s="synthese"] .kpis .card.kpi:first-child .lbl{font-size:11px}
-.section[data-s="synthese"] .kpis .card.kpi:first-child .val{font-size:44px;letter-spacing:-.045em;margin-top:14px}
-.section[data-s="synthese"] .kpis .card.kpi:first-child .meta{font-size:13px;margin-top:10px}
-@media(max-width:1000px){.section[data-s="synthese"] .kpis{grid-template-columns:1fr 1fr}.section[data-s="synthese"] .kpis .card.kpi:first-child{grid-row:auto;grid-column:1 / -1}}
+.section[data-s="synthese"] .kpis>.card.kpi:first-child .lbl{font-size:11px}
+.section[data-s="synthese"] .kpis>.card.kpi:first-child .val{font-size:44px;letter-spacing:-.045em;margin-top:14px}
+.section[data-s="synthese"] .kpis>.card.kpi:first-child .meta{font-size:13px;margin-top:10px}
+@media(max-width:1000px){.section[data-s="synthese"] .kpis{grid-template-columns:1fr 1fr}.section[data-s="synthese"] .kpis>.card.kpi:first-child{grid-row:auto;grid-column:1 / -1}}
 /* boutons primaires -> dégradé bleu + halo */
 .add[style*="var(--accent)"]{background:linear-gradient(140deg,#4d8dff,#3a6fe0)!important;color:#fff!important;box-shadow:0 8px 26px rgba(77,141,255,.5),inset 0 1px 0 rgba(255,255,255,.3)}
 .signal{box-shadow:var(--glow)}
@@ -182,11 +182,14 @@ table.tb tbody tr:hover td{background:rgba(255,255,255,.025)}
 .card.kpi{background:linear-gradient(150deg,rgba(77,141,255,.18),rgba(77,141,255,.03) 48%,rgba(255,255,255,.012)),linear-gradient(158deg,rgba(255,255,255,.05),rgba(255,255,255,.015))}
 /* FIX chiffres illisibles (bloc blanc) : blanc plein fiable, dégradé gardé QUE sur le héros */
 .kpi .val{color:#f2f6ff!important;-webkit-text-fill-color:#f2f6ff!important;background:none!important;background-clip:border-box!important;-webkit-background-clip:border-box!important;text-shadow:none!important}
-.section[data-s="synthese"] .kpis .card.kpi:first-child .val{background:linear-gradient(100deg,#f2f6ff,#8fd0ff 55%,#5ff0c0)!important;-webkit-background-clip:text!important;background-clip:text!important;-webkit-text-fill-color:transparent!important}
-.section[data-s="synthese"] .kpis .card.kpi:first-child>.lbl,.section[data-s="synthese"] .kpis .card.kpi:first-child>.val,.section[data-s="synthese"] .kpis .card.kpi:first-child>.meta{position:relative;z-index:1}
+.section[data-s="synthese"] .kpis>.card.kpi:first-child .val{background:linear-gradient(100deg,#f2f6ff,#8fd0ff 55%,#5ff0c0)!important;-webkit-background-clip:text!important;background-clip:text!important;-webkit-text-fill-color:transparent!important}
+.section[data-s="synthese"] .kpis>.card.kpi:first-child>.lbl,.section[data-s="synthese"] .kpis>.card.kpi:first-child>.val,.section[data-s="synthese"] .kpis>.card.kpi:first-child>.meta{position:relative;z-index:1}
 .mini-ic{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;margin-right:8px;vertical-align:-3px}.mini-ic svg{width:15px;height:15px;stroke-width:2}
-.section[data-s="synthese"] .kpis .card.kpi:first-child .val{background:linear-gradient(100deg,#f2f6ff,#8fd0ff 55%,#5ff0c0);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.section[data-s="synthese"] .kpis>.card.kpi:first-child .val{background:linear-gradient(100deg,#f2f6ff,#8fd0ff 55%,#5ff0c0);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 /* ================================================================================================= */
+/* KPI : chiffres identiques (taille + couleur) sur toutes les cartes de chiffres ; seul le héros Patrimoine reste plus grand */
+.kpi .val{font-size:31px!important;color:#c7dbff!important;-webkit-text-fill-color:#c7dbff!important;background:none!important;-webkit-background-clip:border-box!important;background-clip:border-box!important;text-shadow:none!important;letter-spacing:-.035em}
+.section[data-s="synthese"] .kpis>.card.kpi:first-child .val{font-size:44px!important;color:transparent!important;-webkit-text-fill-color:transparent!important;background:linear-gradient(100deg,#f2f6ff,#8fd0ff 55%,#5ff0c0)!important;-webkit-background-clip:text!important;background-clip:text!important}
 </style>
 </head>
 <body>

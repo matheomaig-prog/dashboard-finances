@@ -137,7 +137,7 @@ table.tb th{color:#9aa7c6}
 .kpi .val{font-size:26px}
 /* Héros patrimoine (Synthèse) */
 .section[data-s="synthese"] .kpis{grid-template-columns:1.45fr 1fr;align-items:stretch}
-.section[data-s="synthese"] .kpis .card.kpi:first-child{grid-row:1 / span 3;display:flex;flex-direction:column;justify-content:center;
+.section[data-s="synthese"] .kpis .card.kpi:first-child{grid-row:1 / span 3;display:flex;flex-direction:column;justify-content:flex-start;padding-top:20px;
  background:linear-gradient(150deg,rgba(77,141,255,.18),rgba(77,141,255,.03) 46%,rgba(255,255,255,.012));border-color:rgba(77,141,255,.28);box-shadow:0 14px 44px rgba(0,0,0,.36),var(--glow),inset 0 1px 0 rgba(255,255,255,.06)}
 .section[data-s="synthese"] .kpis .card.kpi:first-child .lbl{font-size:11px}
 .section[data-s="synthese"] .kpis .card.kpi:first-child .val{font-size:44px;letter-spacing:-.045em;margin-top:14px}
@@ -152,7 +152,7 @@ table.tb th{color:#9aa7c6}
 .cls-ic{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;flex:none;transition:transform .15s}.cls-ic svg{width:18px;height:18px;stroke-width:2}
 .obh:hover .cls-ic{transform:scale(1.07)}
 .card.kpi{position:relative;overflow:hidden}.kpi-ic{position:absolute;top:15px;right:15px;width:34px;height:34px;z-index:2}.kpi-ic svg{width:17px;height:17px}
-.hero-spark{position:absolute;left:0;right:0;bottom:0;height:64%;opacity:.8;z-index:0}
+.hero-spark{position:absolute;left:0;right:0;bottom:0;height:54%;opacity:.8;z-index:0}
 .section[data-s="synthese"] .kpis .card.kpi:first-child>.lbl,.section[data-s="synthese"] .kpis .card.kpi:first-child>.val,.section[data-s="synthese"] .kpis .card.kpi:first-child>.meta{position:relative;z-index:1}
 .mini-ic{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;margin-right:8px;vertical-align:-3px}.mini-ic svg{width:15px;height:15px;stroke-width:2}
 .section[data-s="synthese"] .kpis .card.kpi:first-child .val{background:linear-gradient(100deg,#f2f6ff,#8fd0ff 55%,#5ff0c0);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
@@ -188,7 +188,8 @@ const IC={
  patrimoine:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12A9 9 0 1 1 12 3v9z"/></svg>',
  budget:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="6" y1="20" x2="6" y2="13"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="18" y1="20" x2="18" y2="9"/></svg>',
  objectifs:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 21V4l13 4-13 4"/></svg>',
- historique:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><path d="M12 7v5l3 2"/></svg>'};
+ historique:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><path d="M12 7v5l3 2"/></svg>',
+ impots:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V11M9 21V11M15 21V11M19 21V11"/><path d="M3 11l9-6 9 6z"/></svg>'};
 const ICONCLS={
  cash:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 7h15a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h11"/><circle cx="17" cy="13" r="1.4"/></svg>',
  etf:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 17l6-6 4 4 8-8"/><path d="M17 7h4v4"/></svg>',
@@ -240,7 +241,7 @@ function objIcon(t){const n=(t||"").toLowerCase();
  if(/anglais|langue|english|langage|langage/.test(n))return ICOBJ.anglais;
  if(/patrimoin|argent|invest|épargne|epargne|financ|richesse|dca/.test(n))return ICOBJ.patrimoine;
  return ICOBJ._;}
-const TABS=[["synthese","Synthèse"],["patrimoine","Patrimoine"],["budget","Budget"],["objectifs","Objectifs"],["historique","Historique"]];
+const TABS=[["synthese","Synthèse"],["patrimoine","Patrimoine"],["budget","Budget"],["objectifs","Objectifs"],["historique","Historique"],["impots","Impôts"]];
 function P(a){return a.concat(Array(Math.max(0,12-a.length)).fill(0));}
 
 const SEED={
@@ -300,6 +301,11 @@ const SEED={
  history:[],
  fgoals:[{name:"Argent",cible:0,actuel:0}],
  focusMois:"",
+ impots:[
+  {name:"Impôt sur le revenu",montant:0,note:""},
+  {name:"Taxe foncière",montant:0,note:""},
+  {name:"Taxe d'habitation",montant:0,note:""},
+  {name:"Prélèvements sociaux (placements)",montant:0,note:""}],
  objs:[
   {titre:"Business",etat:"",action:"",resultat:"",statut:"En cours",prio:1,_open:false},
   {titre:"Physique",etat:"",action:"",resultat:"",statut:"En cours",prio:2,_open:false},
@@ -339,6 +345,7 @@ function migrate(s){
  if(s.revenus&&s.revenus[0]&&!s.revenus[0].subs)s.revenus=s.revenus.map(p=>({name:p.name,_open:false,subs:[{name:p.name,m:p.m||P([])}]}));
  if(s.depenses&&s.depenses[0]&&!s.depenses[0].subs)s.depenses=s.depenses.map(p=>({name:p.name,cvar:p.cvar||"--mut",_open:false,subs:[{name:p.name,m:p.m||P([])}]}));
  if(!s.objs)s.objs=clone(SEED.objs);
+ if(!s.impots)s.impots=clone(SEED.impots);
  s.objs=s.objs.map(o=>("titre"in o)?o:{titre:o.axe||"Objectif",etat:o.actuel||"",action:"",resultat:o.vise||o.resultat||"",statut:o.statut||"En cours",_open:false});
  s.objs.forEach((o,idx)=>{if(o.titre==="Communication")o.titre="Socialité";if(o.prio===undefined)o.prio=idx+1;});
  const _etf=s.assets.find(a=>a.key==="etf");if(_etf&&/ETF/i.test(_etf.name||"")&&/PEA/i.test(_etf.name||""))_etf.name="PEA";
@@ -524,6 +531,7 @@ function render(){
  const actVal=actIdx.reduce((s,i)=>s+c.assetsView[i].val,0);
  const stratRows=tgtShown.filter(x=>!actKeys.includes(x.a.key));
  const totalStrat=num(state.cibleActions)+stratRows.reduce((s,x)=>s+num(x.a.cible),0)+num(state.cashCible);
+ const totalImpots=(state.impots||[]).reduce((s,im)=>s+num(im.montant),0);
  const lifeSorted=state.objs.map((o,oi)=>({o,oi})).sort((a,b)=>(a.o.prio||99)-(b.o.prio||99));
  const histMonthBlocks=hDesc.map((h,idx)=>{const older=hDesc[idx+1]?hDesc[idx+1].total:null;const va=older!=null?h.total-older:null;const detail=h.parts?('<div class="scroll"><table class="tb"><tbody>'+CLSord.map(cc=>(h.parts[cc[0]]!=null&&h.parts[cc[0]]>0)?('<tr><td><span class="mini-ic" style="color:'+col(cc[2])+'">'+(ICONCLS[cc[0]]||ICONCLS._)+'</span>'+cc[1]+'</td><td class="r">'+fmtE2(h.parts[cc[0]])+'</td></tr>'):'').join("")+'</tbody></table></div>'):'<div class="note">Détail non disponible (mois saisi à la main) — seul le total est connu.</div>';return '<div class="ob'+(h._open?" open":"")+'"><div class="obh" data-k="hist-toggle" data-ym="'+h.ym+'"><span class="cls-ic" style="color:#4d8dff;background:linear-gradient(140deg,#4d8dff33,#4d8dff12);border:1px solid #4d8dff55;box-shadow:0 0 14px #4d8dff33,inset 0 1px 0 rgba(255,255,255,.12)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg></span><span class="ti">'+ymLabel(h.ym)+'</span><span style="margin-left:auto;font-weight:750;font-variant-numeric:tabular-nums">'+fmtE(h.total)+'</span>'+(va!=null?'<span class="ecart '+(va>=0?"ec-pos":"ec-neg")+'">'+(va>=0?"+":"")+fmtE(va)+'</span>':'')+CHEV+'</div><div class="obbody">'+detail+'</div></div>';}).join("");
 
@@ -631,6 +639,21 @@ function render(){
      <div class="scroll"><table class="tb"><thead><tr><th>Mois</th><th class="r">Patrimoine total</th><th></th></tr></thead><tbody>${histRows}</tbody></table></div>
      ${histAdd}
    </div>
+ </section>
+ <section class="section" data-s="impots">
+   <div class="head"><h1>Impôts</h1><p>Ce que tu verses à l'État, centralisé — impôt sur le revenu, taxes, prélèvements.</p></div>
+   <div class="grid two">
+     <div class="card kpi"><span class="cls-ic kpi-ic" style="color:#f5a623;background:linear-gradient(140deg,#f5a62333,#f5a62312);border:1px solid #f5a62355;box-shadow:0 0 16px #f5a62333,inset 0 1px 0 rgba(255,255,255,.12)">${IC.impots}</span><div class="lbl">Total versé (année en cours)</div><div class="val">${fmtE(totalImpots)}</div><div class="meta">${state.impots.length} postes</div></div>
+     <div class="card kpi"><div class="lbl">Poids sur tes revenus</div><div class="val">${c.revYear>0?(totalImpots/c.revYear*100).toFixed(1)+'%':'—'}</div><div class="meta">part des revenus de l'année</div></div>
+   </div>
+   <div class="card" style="margin-top:16px">
+     <div class="scroll"><table class="tb"><thead><tr><th>Impôt / taxe</th><th class="r">Montant (€/an)</th><th>Échéance / note</th><th></th></tr></thead><tbody>
+     ${state.impots.map((im,i)=>'<tr><td>'+inp("impot-name",i,null,im.name,"tt")+'</td><td class="r" style="width:150px">'+inp("impot-montant",i,null,im.montant,"num","number")+'</td><td>'+inp("impot-note",i,null,im.note||"")+'</td><td><button class="rm" data-k="impot-del" data-i="'+i+'">×</button></td></tr>').join("")}
+     <tr class="tot"><td>Total</td><td class="r">${fmtE(totalImpots)}</td><td></td><td></td></tr>
+     </tbody></table></div>
+     <button class="add" data-k="impot-add">+ Ajouter un impôt / une taxe</button>
+     <div class="note">Centralise ce que tu verses à l'État (impôt sur le revenu, taxe foncière, prélèvements sociaux sur tes placements…). Montants indicatifs — ce n'est pas un conseil fiscal.</div>
+   </div>
  </section>`;
  show(tab);
 }
@@ -670,6 +693,9 @@ document.getElementById("root").addEventListener("change",e=>{
   case"fgoal-unite":state.fgoals[i].unite=v;break;
   case"fgoal-echeance":state.fgoals[i].echeance=v;break;
   case"focus-mois":state.focusMois=v;break;
+  case"impot-name":state.impots[i].name=v;break;
+  case"impot-montant":state.impots[i].montant=v;break;
+  case"impot-note":state.impots[i].note=v;break;
   case"obj-titre":state.objs[i].titre=v;break;
   case"obj-etat":state.objs[i].etat=v;break;
   case"obj-action":state.objs[i].action=v;break;
@@ -681,7 +707,7 @@ document.getElementById("root").addEventListener("change",e=>{
   case"hist-add":if(t.value){state.history.push({ym:t.value,total:0});}break;
   default:return;
  }
- const LIGHT=["obj-titre","obj-etat","obj-action","obj-resultat","obj-statut","poste-name","sub-name","compte-name","compte-bank","compte-role","asset-note","cash-note","asset-lnom","mom-nom","mom-isin","fgoal-name","fgoal-unite","fgoal-echeance","focus-mois"];
+ const LIGHT=["obj-titre","obj-etat","obj-action","obj-resultat","obj-statut","poste-name","sub-name","compte-name","compte-bank","compte-role","asset-note","cash-note","asset-lnom","mom-nom","mom-isin","fgoal-name","fgoal-unite","fgoal-echeance","focus-mois","impot-name","impot-note"];
  if(LIGHT.includes(k)){save();}else{refresh();}
 });
 
@@ -717,6 +743,8 @@ document.getElementById("root").addEventListener("click",e=>{
   case"sub-add":grp(g)[i].subs.push({name:"Nouvelle sous-partie",m:P([])});break;
   case"sub-del":grp(g)[i].subs.splice(s,1);break;
   case"fgoal-add":state.fgoals.push({name:"Nouvel objectif",cible:0,actuel:0});break;
+  case"impot-add":state.impots.push({name:"Nouvel impôt",montant:0,note:""});break;
+  case"impot-del":state.impots.splice(i,1);break;
   case"fgoal-del":state.fgoals.splice(i,1);break;
   case"obj-add":state.objs.push({titre:"Nouvel objectif",etat:"",action:"",resultat:"",statut:"En cours",_open:true});break;
   case"obj-del":state.objs.splice(i,1);break;

@@ -127,7 +127,7 @@ body{background:
 .brand .logo{background:linear-gradient(140deg,#4d8dff,#38bdf8);box-shadow:0 6px 20px rgba(77,141,255,.5)}
 .nav-item.on{background:linear-gradient(90deg,rgba(77,141,255,.28),rgba(77,141,255,.05));color:#cfe0ff;box-shadow:inset 0 0 0 1px rgba(77,141,255,.35),0 0 24px rgba(77,141,255,.16)}
 .nav-item.on::before{display:none}.nav-item.on svg{color:var(--accent)}
-.card,.ob,.fg{background:radial-gradient(130% 90% at 100% 0%,rgba(77,141,255,.07),transparent 55%),linear-gradient(158deg,rgba(255,255,255,.06),rgba(255,255,255,.015));border-color:var(--line);box-shadow:0 14px 40px rgba(0,0,0,.38),inset 0 1px 0 rgba(255,255,255,.05);backdrop-filter:blur(14px)}
+.card,.ob,.fg{background:linear-gradient(150deg,rgba(77,141,255,.12),rgba(77,141,255,.02) 50%,rgba(255,255,255,.012)),linear-gradient(158deg,rgba(255,255,255,.045),rgba(255,255,255,.012));border-color:rgba(77,141,255,.15);box-shadow:0 14px 40px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.05);backdrop-filter:blur(14px)}
 .card:hover,.ob:hover{border-color:rgba(255,255,255,.16)}
 .obh:hover{background:rgba(255,255,255,.03)}
 /* contraste : libellés + sous-titres plus clairs (avant : gris trop sombre, illisible) */
@@ -179,7 +179,7 @@ table.tb tbody tr:hover td{background:rgba(255,255,255,.025)}
 .card h3::before{content:"";position:absolute;left:0;top:3px;bottom:3px;width:3px;border-radius:3px;background:linear-gradient(180deg,var(--accent),transparent)}
 /* lisibilité : chiffres nets (fini le flou), halo adouci */
 .kpi .val{text-shadow:none!important;background:linear-gradient(120deg,#ffffff,#bcd4ff)}
-.card.kpi{background:radial-gradient(120% 150% at 50% -22%,rgba(77,141,255,.09),transparent 60%),linear-gradient(158deg,rgba(255,255,255,.07),rgba(255,255,255,.02))}
+.card.kpi{background:linear-gradient(150deg,rgba(77,141,255,.18),rgba(77,141,255,.03) 48%,rgba(255,255,255,.012)),linear-gradient(158deg,rgba(255,255,255,.05),rgba(255,255,255,.015))}
 /* FIX chiffres illisibles (bloc blanc) : blanc plein fiable, dégradé gardé QUE sur le héros */
 .kpi .val{color:#f2f6ff!important;-webkit-text-fill-color:#f2f6ff!important;background:none!important;background-clip:border-box!important;-webkit-background-clip:border-box!important;text-shadow:none!important}
 .section[data-s="synthese"] .kpis .card.kpi:first-child .val{background:linear-gradient(100deg,#f2f6ff,#8fd0ff 55%,#5ff0c0)!important;-webkit-background-clip:text!important;background-clip:text!important;-webkit-text-fill-color:transparent!important}

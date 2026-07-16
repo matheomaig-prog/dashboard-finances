@@ -168,7 +168,7 @@ table.tb th{color:#9aa7c6}
       <button class="tbtn danger" id="bReset">↺ Réinitialiser</button>
       <input type="file" id="fImport" accept="application/json" style="display:none">
     </div>
-    <div class="foot">Socle v1 · local</div>
+    <div class="foot">Cloud · privé</div>
   </aside>
   <main class="main"><div id="root"></div></main>
 </div>
@@ -404,13 +404,11 @@ function histChart(id){const h=state.history.slice().sort((a,b)=>a.ym<b.ym?-1:1)
  fill:true,tension:.35,pointRadius:4,pointBackgroundColor:"#0d1117",pointBorderColor:"#38bdf8",pointBorderWidth:2}]},options:{plugins:{legend:{display:false},tooltip:{callbacks:{label:x=>" "+fmtE(x.raw)}}},scales:{x:gx,y:gy({callback:v=>(v/1000)+"k"})}}});}
 function buildCharts(t){
  const c=compute();
- if(t==="synthese"){histChart("cHist");
+ if(t==="synthese"){histChart("cHist");}
+ if(t==="patrimoine"){donut("cDonut",c);
    const hp=state.history.filter(h=>h.parts).sort((a,b)=>a.ym<b.ym?-1:1);
    const inv=state.assets.filter(a=>assetInvest(a)>0);
    mk("cPerf",{type:"line",data:{labels:hp.map(h=>ymLabel(h.ym)),datasets:inv.map(a=>{const iv=assetInvest(a);return {label:a.name,data:hp.map(h=>h.parts[a.key]!=null?+(((h.parts[a.key]-iv)/iv*100).toFixed(1)):null),borderColor:col(a.cvar),backgroundColor:col(a.cvar),tension:.3,pointRadius:3,borderWidth:2,fill:false,spanGaps:true};})},options:{plugins:{legend:lgT,tooltip:{callbacks:{label:x=>" "+x.dataset.label+" : "+(x.raw>=0?"+":"")+x.raw+"%"}}},scales:{x:gx,y:gy({callback:v=>v+"%"})}}});}
- if(t==="patrimoine"){donut("cDonut",c);
-   const av=c.assets.filter(a=>a.val>0||a.cible>0);
-   mk("cAlloc",{type:"bar",data:{labels:av.map(a=>a.name),datasets:[{label:"Actuel",data:av.map(a=>+a.pct.toFixed(1)),backgroundColor:col("--accent"),borderRadius:6,barPercentage:.7},{label:"Cible",data:av.map(a=>a.cible),backgroundColor:"#3a424f",borderRadius:6,barPercentage:.7}]},options:{plugins:{legend:lgT,tooltip:{callbacks:{label:x=>" "+x.dataset.label+" : "+x.raw+"%"}}},scales:{x:gx,y:gy({callback:v=>v+"%"})}}});}
  if(t==="budget"){flow("cFlow",c);
    const cs=c.depCat.slice().sort((a,b)=>b.avg-a.avg);
    mk("cCats",{type:"doughnut",data:{labels:cs.map(x=>x.name),datasets:[{data:cs.map(x=>+x.avg.toFixed(0)),backgroundColor:cs.map(x=>col(x.cvar)),borderWidth:3,borderColor:"#0d1117"}]},options:{cutout:"58%",plugins:{legend:{position:"right",labels:{color:"#eef2fb",usePointStyle:true,boxWidth:10,padding:8,generateLabels:pctLabels}},tooltip:{callbacks:{label:x=>" "+fmtE(x.raw)+" / mois  ·  total an "+fmtE(cs[x.dataIndex].total)}}}}});}
@@ -521,7 +519,7 @@ function render(){
  const histMonthBlocks=hDesc.map((h,idx)=>{const older=hDesc[idx+1]?hDesc[idx+1].total:null;const va=older!=null?h.total-older:null;const detail=h.parts?('<div class="scroll"><table class="tb"><tbody>'+CLSord.map(cc=>h.parts[cc[0]]!=null?('<tr><td><span class="mini-ic" style="color:'+col(cc[2])+'">'+(ICONCLS[cc[0]]||ICONCLS._)+'</span>'+cc[1]+'</td><td class="r">'+fmtE2(h.parts[cc[0]])+'</td></tr>'):'').join("")+'</tbody></table></div>'):'<div class="note">Détail non disponible (mois saisi à la main) — seul le total est connu.</div>';return '<div class="ob'+(h._open?" open":"")+'"><div class="obh" data-k="hist-toggle" data-ym="'+h.ym+'"><span class="cls-ic" style="color:#4d8dff;background:linear-gradient(140deg,#4d8dff33,#4d8dff12);border:1px solid #4d8dff55;box-shadow:0 0 14px #4d8dff33,inset 0 1px 0 rgba(255,255,255,.12)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg></span><span class="ti">'+ymLabel(h.ym)+'</span><span style="margin-left:auto;font-weight:750;font-variant-numeric:tabular-nums">'+fmtE(h.total)+'</span>'+(va!=null?'<span class="ecart '+(va>=0?"ec-pos":"ec-neg")+'">'+(va>=0?"+":"")+fmtE(va)+'</span>':'')+CHEV+'</div><div class="obbody">'+detail+'</div></div>';}).join("");
 
  document.getElementById("root").innerHTML=`
- ${STORAGE_OK?"":'<div style="background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;font-size:12.5px;border-radius:12px;padding:11px 14px;margin-bottom:16px">⚠ Ton navigateur ne garde pas les données en local pour un fichier ouvert en direct. Tes saisies tiennent le temps de la session — clique « Exporter » pour sauvegarder, ou on héberge le site (Phase 1b) pour un vrai enregistrement.</div>'}
+ ${STORAGE_OK?"":'<div style="background:rgba(176,42,42,.22);border:1px solid rgba(200,60,60,.4);color:#ffb0a6;font-size:12.5px;border-radius:12px;padding:11px 14px;margin-bottom:16px">⚠ Ce navigateur bloque le stockage local, mais tes données restent sauvegardées dans le cloud dès que tu es connecté.</div>'}
  <section class="section" data-s="synthese">
    <div class="head"><h1>Synthèse</h1><p>Vue d'ensemble · ${new Date().toLocaleDateString("fr-FR",{day:"numeric",month:"long",year:"numeric"})}</p></div>
    <div class="grid kpis">
@@ -532,7 +530,13 @@ function render(){
    </div>
    <div class="grid two" style="margin-top:16px">
      <div class="card"><h3>Évolution du patrimoine</h3><div class="h-sub">Au fil des mois${state.history.length<2?" — se remplit chaque mois":""}</div><div class="cv sm"><canvas id="cHist"></canvas></div></div>
-     <div class="card"><h3>Rendement par classe (%)</h3><div class="h-sub">% de gain de chaque actif vs ton investi — là tu vois quoi rapporte le plus</div><div class="cv sm"><canvas id="cPerf"></canvas></div></div>
+     <div class="card"><h3>Performance — tes gains</h3><div class="h-sub">Valeur vs investi (hors cash)</div>
+       <div class="perf"><div><div class="lbl">Investi</div><div class="v">${fmtE(c.investTotal)}</div></div><div><div class="lbl">Valeur</div><div class="v">${fmtE(c.investValue)}</div></div><div><div class="lbl">Plus-value</div><div class="v" style="color:${c.pvTotal>=0?'#34d399':'#f0776b'}">${c.pvTotal>=0?"+":""}${fmtE(c.pvTotal)} (${c.pvPct>=0?"+":""}${c.pvPct.toFixed(1)}%)</div></div></div>
+       ${c.varMonth!=null?'<div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;font-size:13px"><span style="color:var(--mut)">Variation ce mois (patrimoine)</span><span style="font-weight:750;color:'+(c.varMonth>=0?'#34d399':'#f0776b')+'">'+(c.varMonth>=0?"+":"")+fmtE(c.varMonth)+' ('+(c.varPct>=0?"+":"")+(c.varPct||0).toFixed(1)+'%)</span></div>':''}
+       <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--line)"><div class="lbl" style="margin-bottom:6px">Détail des gains par classe</div>
+       ${c.assetsView.filter(a=>a.invest>0).length?c.assetsView.filter(a=>a.invest>0).slice().sort((x,y)=>y.val-x.val).map(a=>'<div style="display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:13px"><span class="dot" style="background:'+col(a.cvar)+'"></span><span style="font-weight:600">'+esc(a.name)+'</span><span style="margin-left:auto;color:var(--mut);font-variant-numeric:tabular-nums">'+fmtE(a.val)+'</span><span style="width:88px;text-align:right;font-weight:700;color:'+(a.pv>=0?'#34d399':'#f0776b')+'">'+(a.pv>=0?"+":"")+fmtE(a.pv)+'</span><span style="width:58px;text-align:right;font-weight:700;color:'+(a.pvpct>=0?'#34d399':'#f0776b')+'">'+(a.pvpct>=0?"+":"")+a.pvpct.toFixed(1)+'%</span></div>').join(""):'<div class="note">Renseigne un « investi de base » sur tes classes pour voir le détail des gains.</div>'}
+       </div>
+     </div>
    </div>
    ${lossClasses.length?'<div style="background:linear-gradient(150deg,rgba(176,42,42,.28),rgba(140,30,30,.14));border:1px solid rgba(200,60,60,.4);color:#ffb0a6;font-size:12.5px;border-radius:12px;padding:11px 14px;margin-top:16px;box-shadow:0 0 18px rgba(176,42,42,.18)">⚠ En moins-value : '+lossClasses.map(a=>esc(a.name)+" ("+a.pvpct.toFixed(1)+"%)").join(", ")+'</div>':''}
    <div class="grid two" style="margin-top:16px">
@@ -552,15 +556,9 @@ function render(){
    <div class="head" style="display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap"><div><h1>Patrimoine</h1><p>Clique une classe pour la dérouler et la détailler. Total : ${fmtE(c.total)}</p></div><button class="add" data-k="open-wiz" data-mode="patrimoine" style="margin:0;border-style:solid;background:var(--accent);color:#fff;border-color:var(--accent);padding:11px 18px;font-size:13.5px">📸 Faire le point actuel</button></div>
    <div class="grid two">
      <div class="card"><h3>Répartition</h3><div class="cv"><canvas id="cDonut"></canvas></div></div>
-     <div class="card"><h3>Performance — tes gains</h3><div class="h-sub">Valeur vs investi (hors cash)</div>
-       <div class="perf"><div><div class="lbl">Investi</div><div class="v">${fmtE(c.investTotal)}</div></div><div><div class="lbl">Valeur</div><div class="v">${fmtE(c.investValue)}</div></div><div><div class="lbl">Plus-value</div><div class="v" style="color:${c.pvTotal>=0?'#34d399':'#f0776b'}">${c.pvTotal>=0?"+":""}${fmtE(c.pvTotal)} (${c.pvPct>=0?"+":""}${c.pvPct.toFixed(1)}%)</div></div></div>
-       ${c.varMonth!=null?'<div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;font-size:13px"><span style="color:var(--mut)">Variation ce mois (patrimoine)</span><span style="font-weight:750;color:'+(c.varMonth>=0?'#34d399':'#f0776b')+'">'+(c.varMonth>=0?"+":"")+fmtE(c.varMonth)+' ('+(c.varPct>=0?"+":"")+(c.varPct||0).toFixed(1)+'%)</span></div>':''}
-       <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--line)"><div class="lbl" style="margin-bottom:6px">Détail des gains par classe</div>
-       ${c.assetsView.filter(a=>a.invest>0).length?c.assetsView.filter(a=>a.invest>0).map(a=>'<div style="display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:13px"><span class="dot" style="background:'+col(a.cvar)+'"></span><span style="font-weight:600">'+esc(a.name)+'</span><span style="margin-left:auto;color:var(--mut);font-variant-numeric:tabular-nums">'+fmtE(a.val)+'</span><span style="width:88px;text-align:right;font-weight:700;color:'+(a.pv>=0?'#34d399':'#f0776b')+'">'+(a.pv>=0?"+":"")+fmtE(a.pv)+'</span><span style="width:58px;text-align:right;font-weight:700;color:'+(a.pvpct>=0?'#34d399':'#f0776b')+'">'+(a.pvpct>=0?"+":"")+a.pvpct.toFixed(1)+'%</span></div>').join(""):'<div class="note">Renseigne un « investi de base » sur tes classes pour voir le détail des gains.</div>'}
-       </div>
-     </div>
+     <div class="card"><h3>Rendement par classe (%)</h3><div class="h-sub">% de gain de chaque actif au fil des mois — tu vois clairement qui rapporte le plus</div><div class="cv"><canvas id="cPerf"></canvas></div></div>
    </div>
-   <div style="margin-top:20px;display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px"><div class="sech" style="margin:0">Mes classes d'actifs</div><div style="font-size:11.5px;color:var(--mut)">Le % à droite = évolution (gain / perte vs investi)</div></div>
+   <div style="margin-top:20px;display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px"><div class="sech" style="margin:0">Mes classes d'actifs</div></div>
    <div class="ob${state._cashOpen?" open":""}" style="margin-top:12px"><div class="obh" data-k="cash-toggle"><span class="cls-ic" style="color:${col("--cash")};background:linear-gradient(140deg,${col("--cash")}33,${col("--cash")}12);border:1px solid ${col("--cash")}55;box-shadow:0 0 18px ${col("--cash")}33,inset 0 1px 0 rgba(255,255,255,.12)">${ICONCLS.cash}</span><span class="ti">Cash (Livret + Courant)</span><span style="margin-left:auto;font-weight:750;font-variant-numeric:tabular-nums">${fmtE2(c.cashTotal)}</span>${CHEV}</div>
      <div class="obbody"><button class="add" data-k="open-wiz" data-mode="cash" style="margin:0 0 8px 0;border-style:solid;background:var(--accent);color:#fff;border-color:var(--accent)">📸 Faire le point du cash</button>
      <div class="scroll" style="margin-top:4px"><table class="tb"><thead><tr><th>Compte</th><th>Banque</th><th>Rôle</th><th class="r">Solde</th><th></th></tr></thead><tbody>
@@ -568,11 +566,11 @@ function render(){
      </tbody></table></div><button class="add" data-k="compte-add">+ Ajouter un compte</button>
      <div class="fld"><label>Notes</label>${inp("cash-note",null,null,state.cashNote||"","","textarea")}</div>
    </div></div>
-   ${state.assets.map((a,i)=>assetBlock(a,i,c.assetsView[i])).join("")}
+   ${state.assets.map((a,i)=>({a,i})).sort((x,y)=>assetVal(y.a)-assetVal(x.a)).map(o=>assetBlock(o.a,o.i,c.assetsView[o.i])).join("")}
    <div class="sech" style="margin-top:26px">Stratégie — allocation cible</div>
    <div class="card"><div class="h-sub">Fixe ta répartition cible : la 3ᵉ colonne = le montant que ça représente sur ton patrimoine actuel (${fmtE(c.total)}).</div>
      <div class="scroll"><table class="tb"><thead><tr><th>Classe</th><th class="r">% actuel</th><th class="r">Cible %</th><th class="r">Montant cible ≈</th></tr></thead><tbody>
-     ${tgtShown.map(x=>'<tr><td>'+esc(x.a.name)+'</td><td class="r">'+c.assetsView[x.i].pct.toFixed(1)+'%</td><td class="r" style="width:96px">'+inp("asset-cible",x.i,null,x.a.cible,"num mo","number")+'</td><td class="r" style="font-weight:650">'+fmtE(num(x.a.cible)/100*c.total)+'</td></tr>').join("")}
+     ${tgtShown.slice().sort((p,q)=>c.assetsView[q.i].val-c.assetsView[p.i].val).map(x=>'<tr><td>'+esc(x.a.name)+'</td><td class="r">'+c.assetsView[x.i].pct.toFixed(1)+'%</td><td class="r" style="width:96px">'+inp("asset-cible",x.i,null,x.a.cible,"num mo","number")+'</td><td class="r" style="font-weight:650">'+fmtE(num(x.a.cible)/100*c.total)+'</td></tr>').join("")}
      <tr><td>Cash</td><td class="r">${c.cashView.pct.toFixed(1)}%</td><td class="r" style="width:96px">${inp("cashCible",null,null,state.cashCible,"num mo","number")}</td><td class="r" style="font-weight:650">${fmtE(num(state.cashCible)/100*c.total)}</td></tr>
      <tr class="tot"><td>Total</td><td class="r">—</td><td class="r" style="color:${(+totalCible.toFixed(1))===100?'#34d399':'#f0776b'}">${(+totalCible.toFixed(1))}%</td><td class="r">${fmtE(totalCible/100*c.total)}</td></tr>
      </tbody></table></div>

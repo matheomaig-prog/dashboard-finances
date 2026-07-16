@@ -180,6 +180,9 @@ table.tb tbody tr:hover td{background:rgba(255,255,255,.025)}
 /* lisibilité : chiffres nets (fini le flou), halo adouci */
 .kpi .val{text-shadow:none!important;background:linear-gradient(120deg,#ffffff,#bcd4ff)}
 .card.kpi{background:radial-gradient(120% 150% at 50% -22%,rgba(77,141,255,.09),transparent 60%),linear-gradient(158deg,rgba(255,255,255,.07),rgba(255,255,255,.02))}
+/* FIX chiffres illisibles (bloc blanc) : blanc plein fiable, dégradé gardé QUE sur le héros */
+.kpi .val{color:#f2f6ff!important;-webkit-text-fill-color:#f2f6ff!important;background:none!important;background-clip:border-box!important;-webkit-background-clip:border-box!important;text-shadow:none!important}
+.section[data-s="synthese"] .kpis .card.kpi:first-child .val{background:linear-gradient(100deg,#f2f6ff,#8fd0ff 55%,#5ff0c0)!important;-webkit-background-clip:text!important;background-clip:text!important;-webkit-text-fill-color:transparent!important}
 .section[data-s="synthese"] .kpis .card.kpi:first-child>.lbl,.section[data-s="synthese"] .kpis .card.kpi:first-child>.val,.section[data-s="synthese"] .kpis .card.kpi:first-child>.meta{position:relative;z-index:1}
 .mini-ic{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;margin-right:8px;vertical-align:-3px}.mini-ic svg{width:15px;height:15px;stroke-width:2}
 .section[data-s="synthese"] .kpis .card.kpi:first-child .val{background:linear-gradient(100deg,#f2f6ff,#8fd0ff 55%,#5ff0c0);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}

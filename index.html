@@ -153,6 +153,17 @@ table.tb th{color:#9aa7c6}
 .obh:hover .cls-ic{transform:scale(1.07)}
 .card.kpi{position:relative;overflow:hidden}.kpi-ic{position:absolute;top:15px;right:15px;width:34px;height:34px;z-index:2}.kpi-ic svg{width:17px;height:17px}
 .hero-spark{position:absolute;left:0;right:0;bottom:0;height:54%;opacity:.8;z-index:0}
+/* ===== polish premium (signature) ===== */
+.card,.ob{transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
+.card:hover{transform:translateY(-2px);box-shadow:0 22px 54px rgba(0,0,0,.46),inset 0 1px 0 rgba(255,255,255,.07)}
+.kpi .val{text-shadow:0 2px 20px rgba(77,141,255,.12)}
+table.tb tbody tr:hover td{background:rgba(255,255,255,.025)}
+.sech{position:relative;padding-left:13px}
+.sech::before{content:"";position:absolute;left:0;top:1px;bottom:1px;width:3px;border-radius:3px;background:linear-gradient(180deg,var(--accent),transparent)}
+.head h1{background:linear-gradient(100deg,#eef2fb 30%,#a9c2ff);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.nav-item:active{transform:scale(.97)}
+.card h3{letter-spacing:-.01em}
+.add:active,.tbtn:active{transform:scale(.98)}
 .section[data-s="synthese"] .kpis .card.kpi:first-child>.lbl,.section[data-s="synthese"] .kpis .card.kpi:first-child>.val,.section[data-s="synthese"] .kpis .card.kpi:first-child>.meta{position:relative;z-index:1}
 .mini-ic{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;margin-right:8px;vertical-align:-3px}.mini-ic svg{width:15px;height:15px;stroke-width:2}
 .section[data-s="synthese"] .kpis .card.kpi:first-child .val{background:linear-gradient(100deg,#f2f6ff,#8fd0ff 55%,#5ff0c0);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
@@ -302,10 +313,12 @@ const SEED={
  fgoals:[{name:"Argent",cible:0,actuel:0}],
  focusMois:"",
  impots:[
-  {name:"Impôt sur le revenu",montant:0,note:""},
-  {name:"Taxe foncière",montant:0,note:""},
-  {name:"Taxe d'habitation",montant:0,note:""},
-  {name:"Prélèvements sociaux (placements)",montant:0,note:""}],
+  {name:"Déclarer mes comptes crypto (même étrangers) — formulaire 3916-bis",done:false,note:""},
+  {name:"Déclarer mes plus-values crypto vendues en € — formulaire 2086",done:false,note:""},
+  {name:"Vérifier les revenus SCPI (revenus fonciers)",done:false,note:""},
+  {name:"Récupérer l'IFU (relevé fiscal) PEA / CTO / AV",done:false,note:""},
+  {name:"Vérifier salaires & montants pré-remplis",done:false,note:""},
+  {name:"Garder les relevés annuels de chaque plateforme",done:false,note:""}],
  objs:[
   {titre:"Business",etat:"",action:"",resultat:"",statut:"En cours",prio:1,_open:false},
   {titre:"Physique",etat:"",action:"",resultat:"",statut:"En cours",prio:2,_open:false},
@@ -345,7 +358,8 @@ function migrate(s){
  if(s.revenus&&s.revenus[0]&&!s.revenus[0].subs)s.revenus=s.revenus.map(p=>({name:p.name,_open:false,subs:[{name:p.name,m:p.m||P([])}]}));
  if(s.depenses&&s.depenses[0]&&!s.depenses[0].subs)s.depenses=s.depenses.map(p=>({name:p.name,cvar:p.cvar||"--mut",_open:false,subs:[{name:p.name,m:p.m||P([])}]}));
  if(!s.objs)s.objs=clone(SEED.objs);
- if(!s.impots)s.impots=clone(SEED.impots);
+ if(!s.impots||s.impots.some(im=>im&&im.montant!==undefined&&im.done===undefined))s.impots=clone(SEED.impots);
+ s.impots.forEach(im=>{if(im.done===undefined)im.done=false;if(im.note===undefined)im.note="";});
  s.objs=s.objs.map(o=>("titre"in o)?o:{titre:o.axe||"Objectif",etat:o.actuel||"",action:"",resultat:o.vise||o.resultat||"",statut:o.statut||"En cours",_open:false});
  s.objs.forEach((o,idx)=>{if(o.titre==="Communication")o.titre="Socialité";if(o.prio===undefined)o.prio=idx+1;});
  const _etf=s.assets.find(a=>a.key==="etf");if(_etf&&/ETF/i.test(_etf.name||"")&&/PEA/i.test(_etf.name||""))_etf.name="PEA";
@@ -636,19 +650,31 @@ function render(){
    </div>
  </section>
  <section class="section" data-s="impots">
-   <div class="head"><h1>Impôts</h1><p>Ce que tu verses à l'État, centralisé — impôt sur le revenu, taxes, prélèvements.</p></div>
-   <div class="grid two">
-     <div class="card kpi"><span class="cls-ic kpi-ic" style="color:#f5a623;background:linear-gradient(140deg,#f5a62333,#f5a62312);border:1px solid #f5a62355;box-shadow:0 0 16px #f5a62333,inset 0 1px 0 rgba(255,255,255,.12)">${IC.impots}</span><div class="lbl">Total versé (année en cours)</div><div class="val">${fmtE(totalImpots)}</div><div class="meta">${state.impots.length} postes</div></div>
-     <div class="card kpi"><div class="lbl">Poids sur tes revenus</div><div class="val">${c.revYear>0?(totalImpots/c.revYear*100).toFixed(1)+'%':'—'}</div><div class="meta">part des revenus de l'année</div></div>
+   <div class="head"><h1>Impôts</h1><p>Prépare ta déclaration toute l'année — en avril, tu n'as plus qu'à recopier.</p></div>
+   <div class="card" style="border-left:4px solid var(--accent);display:flex;align-items:center;gap:13px"><span class="cls-ic" style="color:#4d8dff;background:linear-gradient(140deg,#4d8dff33,#4d8dff12);border:1px solid #4d8dff55;box-shadow:0 0 14px #4d8dff33,inset 0 1px 0 rgba(255,255,255,.12)">${IC.impots}</span><div><b style="font-size:14px">Déclaration des revenus : au printemps (avril → juin)</b><div class="h-sub" style="margin:0">Les montants à payer sont dans ton Budget. Ici on garde ce qu'il faut DÉCLARER + les justificatifs, pour que ce soit rapide.</div></div></div>
+   <div class="grid two" style="margin-top:16px">
+     <div class="card"><h3>💡 L'essentiel pour ta situation</h3>
+       <div style="font-size:13px;line-height:1.55;color:var(--ink2)">
+         <p style="margin-bottom:10px"><b style="color:var(--ink)">Crypto</b> — tu déclares tes <b>comptes</b> sur les plateformes, même étrangères (formulaire <b>3916-bis</b>), et tes <b>plus-values</b> quand tu vends en euros (formulaire <b>2086</b>, flat tax 30%). Tant que tu ne vends pas en €, rien à payer.</p>
+         <p style="margin-bottom:10px"><b style="color:var(--ink)">PEA</b> — exonéré d'impôt sur le revenu après 5 ans (hors prélèvements sociaux 17,2%). <b>CTO / Assurance Vie</b> : gains imposés (flat tax 30%, avantages AV après 8 ans).</p>
+         <p style="margin-bottom:0"><b style="color:var(--ink)">SCPI</b> — les loyers = revenus fonciers à déclarer. <b>Salaires</b> : normalement pré-remplis, à vérifier.</p>
+       </div>
+     </div>
+     <div class="card"><h3>📎 À garder de côté (toute l'année)</h3>
+       <div style="font-size:13px;line-height:1.75;color:var(--ink2)">
+         • Relevés annuels de <b>chaque plateforme crypto</b><br>
+         • <b>IFU</b> (imprimé fiscal unique) PEA / CTO / Assurance Vie<br>
+         • Relevés <b>SCPI</b> (revenus fonciers)<br>
+         • Historique de tes <b>ventes crypto en €</b> (dates + montants)<br>
+         • Justificatifs : <b>dons</b>, frais déductibles, etc.
+       </div>
+     </div>
    </div>
-   <div class="card" style="margin-top:16px">
-     <div class="scroll"><table class="tb"><thead><tr><th>Impôt / taxe</th><th class="r">Montant (€/an)</th><th>Échéance / note</th><th></th></tr></thead><tbody>
-     ${state.impots.map((im,i)=>'<tr><td>'+inp("impot-name",i,null,im.name,"tt")+'</td><td class="r" style="width:150px">'+inp("impot-montant",i,null,im.montant,"num","number")+'</td><td>'+inp("impot-note",i,null,im.note||"")+'</td><td><button class="rm" data-k="impot-del" data-i="'+i+'">×</button></td></tr>').join("")}
-     <tr class="tot"><td>Total</td><td class="r">${fmtE(totalImpots)}</td><td></td><td></td></tr>
-     </tbody></table></div>
-     <button class="add" data-k="impot-add">+ Ajouter un impôt / une taxe</button>
-     <div class="note">Centralise ce que tu verses à l'État (impôt sur le revenu, taxe foncière, prélèvements sociaux sur tes placements…). Montants indicatifs — ce n'est pas un conseil fiscal.</div>
+   <div class="card" style="margin-top:16px"><h3>✅ Ma checklist déclaration</h3><div class="h-sub">Coche au fur et à mesure — en avril, tout est prêt.</div>
+     ${state.impots.map((im,i)=>'<div style="display:flex;align-items:flex-start;gap:11px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.05)"><input type="checkbox" class="recbox" data-k="impot-done" data-i="'+i+'"'+(im.done?" checked":"")+' style="margin-top:4px"><div style="flex:1"><input class="inp" data-k="impot-name" data-i="'+i+'" type="text" value="'+esc(im.name)+'" style="font-weight:600'+(im.done?';color:var(--mut);text-decoration:line-through':'')+'"><input class="inp" data-k="impot-note" data-i="'+i+'" type="text" value="'+esc(im.note||"")+'" placeholder="note / justificatif…" style="font-size:12px;margin-top:5px"></div><button class="rm" data-k="impot-del" data-i="'+i+'">×</button></div>').join("")}
+     <button class="add" data-k="impot-add">+ Ajouter un point</button>
    </div>
+   <div class="note">Informations générales sur la fiscalité française — vérifie sur impots.gouv.fr ou avec un professionnel. Ce n'est pas un conseil fiscal personnalisé.</div>
  </section>`;
  show(tab);
 }
@@ -691,6 +717,7 @@ document.getElementById("root").addEventListener("change",e=>{
   case"impot-name":state.impots[i].name=v;break;
   case"impot-montant":state.impots[i].montant=v;break;
   case"impot-note":state.impots[i].note=v;break;
+  case"impot-done":state.impots[i].done=t.checked;break;
   case"obj-titre":state.objs[i].titre=v;break;
   case"obj-etat":state.objs[i].etat=v;break;
   case"obj-action":state.objs[i].action=v;break;
@@ -738,7 +765,7 @@ document.getElementById("root").addEventListener("click",e=>{
   case"sub-add":grp(g)[i].subs.push({name:"Nouvelle sous-partie",m:P([])});break;
   case"sub-del":grp(g)[i].subs.splice(s,1);break;
   case"fgoal-add":state.fgoals.push({name:"Nouvel objectif",cible:0,actuel:0});break;
-  case"impot-add":state.impots.push({name:"Nouvel impôt",montant:0,note:""});break;
+  case"impot-add":state.impots.push({name:"Nouveau point",done:false,note:""});break;
   case"impot-del":state.impots.splice(i,1);break;
   case"fgoal-del":state.fgoals.splice(i,1);break;
   case"obj-add":state.objs.push({titre:"Nouvel objectif",etat:"",action:"",resultat:"",statut:"En cours",_open:true});break;
